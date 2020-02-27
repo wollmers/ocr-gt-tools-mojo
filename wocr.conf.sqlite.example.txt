@@ -1,0 +1,12 @@
+{
+          'db_connect' => [
+                            'dbi:SQLite:dbname=/var/www/www.example.com/wocr.db',
+                            undef,
+                            undef,
+                            {
+                             'sqlite_unicode' => 1
+                            }
+                         ],
+          'db_schema' => 'Wocr::DB::Schema',
+          'secrets' => ['app_secret'],
+}

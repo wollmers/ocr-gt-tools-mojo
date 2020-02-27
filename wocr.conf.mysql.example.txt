@@ -1,0 +1,14 @@
+
+{
+  'db_connect' => [
+                    'DBI:mysql:database=wocr;host=127.0.0.1;port=3306',
+                    'wocr',
+                    'db_user_secret',
+                    {
+                      PrintError => 1, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8 => 1,
+                    }
+                  ],
+  'db_schema' => 'Wocr::DB::Schema',
+  'secret' => 'app_secret'
+}
+
