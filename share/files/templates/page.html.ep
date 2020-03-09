@@ -1,0 +1,26 @@
+% layout 'default';
+% my $hash = stash;
+% my $book = $hash->{'_book'};
+% my $pagedir = $hash->{'_pagedir'};
+% my $page = $hash->{'_page'};
+% my $lines = $hash->{'_lines'};
+
+		
+<div class="container">                                 
+<div class="row">
+<div class="span12"> 
+
+<h2>Page: <%= $page %></h2>
+
+<p>Lines:<br />		 
+% for my $line (sort { $a <=> $b } keys %$lines) {
+    <a href="/line/<%= $lines->{$line} %>"> <%= $line %> </a>
+    % if (($line % 10) == 0) {
+        <br />
+    % }
+% }
+</p>
+
+</div>
+</div>
+</div>

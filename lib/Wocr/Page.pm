@@ -1,23 +1,67 @@
 package Wocr::Page;
 use Mojo::Base 'Mojolicious::Controller';
 
-use Mojo::Dom;
+#use Mojo::Dom;
 
 sub index {
   my $self = shift;
 
-  # Render template "dist/index.html.ep"
-  $self->render();
+  my $page = $self->param('page');
+  #/Users/helmut/github/ocr-gt/AustrianNewspapers/
+  my $ocr_basedir = $self->stash->{'config'}->{'ocr'}->{'basedir'};
+
+  my $lines = {};
+  my $pagedir = '';
+  my $book = '';
+
+  $self->stash('_book'    => $book);
+  $self->stash('_pagedir' => $pagedir);
+  $self->stash('_page'    => $page);
+  $self->stash('_lines'   => $lines);
+
+  #/Users/helmut/github/ocr-gt/AustrianNewspapers/ gt/eval/  ONB_aze_18950706_4/ONB_aze_18950706_4.jpg_tl_1.gt.txt
+  for my $dir (keys %{$self->stash->{'config'}->{'ocr'}->{'lines'}}) {
+    my $dir_name = $ocr_basedir . $self->stash->{'config'}->{'ocr'}->{'lines'}->{$dir};
+    opendir(my $dir_dh, "$dir_name") || die "Can't opendir $dir_name: $!";
+    my @subdirs = grep { /^[^._]/ && -d "$dir_name/$_" } readdir($dir_dh);
+    closedir $dir_dh;
+
+    # ONB_aze_18950706_4
+    for my $subdir (@subdirs) {
+        next unless ($subdir eq $page);
+        $pagedir = $subdir;
+        $book = $subdir;
+        $book =~ s/_\d+$//; # remove page number
+
+        my $subdir_name = $dir_name . '/' . $subdir;
+        opendir(my $subdir_dh, "$subdir_name") || die "Can't opendir $subdir_name: $!";
+        my @lines = grep { /^[^._]/ && /\.txt$/i && -f "$subdir_name/$_" } readdir($subdir_dh);
+        closedir $subdir_dh;
+
+        # ONB_aze_18950706_4.jpg_tl_1.gt.txt
+        for my $line (@lines) {
+            my $line_no = 0;
+            if ($line =~m/_(\d+)\.gt\.txt$/) {
+                $line_no = $1;
+            }
+            $lines->{$line_no} = $line;
+        }
+    }
+  }
+
+  $self->render_not_found
+    unless $self->render(template => "page");
 }
 
 
 sub query {
   my $self = shift;
-  my $dist = $self->param('page');
+  my $page = $self->param('page');
 
   $self->redirect_to("/book/$page");
 }
 
+=pod
 
 sub show {
   my $self = shift;
@@ -44,5 +88,7 @@ sub show {
   #$self->render_not_found  unless
     $self->render();
 }
+
+=cut
 
 1;

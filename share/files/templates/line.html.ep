@@ -1,0 +1,28 @@
+% layout 'default';
+% my $hash    = stash;
+% my $book    = $hash->{'_book'};
+% my $pagedir = $hash->{'_pagedir'};
+% my $page    = $hash->{'_page'};
+% my $line    = $hash->{'_line'};
+% my $text    = $hash->{'_text'};
+% my $image   = $hash->{'_image'};
+% my $ocr_basedir   = $hash->{'_ocr_basedir'};
+		
+<div class="container">                                 
+<div class="row">
+<div class="span12"> 
+
+<h2>ocr_basedir: <%= $ocr_basedir %></h2>
+
+<h2>Book: <%= $book %></h2>
+
+<h2>Page:<%= $page %></h2>
+
+<p>Line: <%= $line %><br />		 
+<img src="<%= $image %>" /><br />
+<%= $text %>
+</p>
+
+</div>
+</div>
+</div>

@@ -1,22 +1,45 @@
-
+#!perl
 {
-          'db_connect' => [
-                            'dbi:SQLite:dbname=wocr.db',
-                            undef,
-                            undef,
-                            {
-                             'sqlite_unicode' => 1
-                            }
-                         ],
-          'db_schema' => 'Wocr::DB::Schema',
-          'secret' => 'app_secret',
-            mail => {
-               from    => 'info@host.example',
-               type    => 'text/html',
-               how     => 'smtp',
-               howargs => [ 'mail.host.example',
-                    AuthUser => 'me@host.example',
-                    AuthPass => '123xyz',
-               ],
-  },
+    'db_connect' => [
+        'dbi:SQLite:dbname=wocr.db',
+         undef,
+         undef,
+         {
+             'sqlite_unicode' => 1
+         }
+    ],
+    'db_schema' => 'Wocr::DB::Schema',
+
+    'secret' => 'app_secret',
+
+    mail => {
+        from    => 'info@host.example',
+        type    => 'text/html',
+        how     => 'smtp',
+        howargs => [ 'mail.host.example',
+            AuthUser => 'me@host.example',
+            AuthPass => '123xyz',
+        ],
+    },
+
+    'ocr' => {
+        'basedir' => '/Users/helmut/github/ocr-gt/AustrianNewspapers/',
+        'pages' => {
+            'page_train' => 'TrainingSet_ONB_Newseye_GT_M1+',
+            'page_eval'  => 'ValidationSet_ONB_Newseye_GT_M1+',
+        },
+        'lines' => {
+            'line_train' => 'gt/train',
+            'line_eval'  => 'gt/eval',
+        },
+        #ONB_aze_18950706_4/ONB_aze_18950706_4.jpg_tl_1.gt.txt
+        'page_name' => [
+            'document' => qr/(\w+_\w+_\d+)/xms,
+            'page_no'  => qr/_(\d+)$/xms,
+        ],
+        'line_name' => [
+            'page'     => qr/(\w+_\w+_\d+_\d)/xms,
+            'line_no'  => qr/\.[^_-]+[_-][^_-]+[_-](\d+)/xms,
+        ],
+    }
 }

@@ -1,23 +1,25 @@
 % layout 'default';
+% my $hash = stash;
+% my $books = $hash->{'_books'};
 		
-		<div>      
-	       <form class="form-horizontal" action="/book" method="post">
-            <fieldset>
-            	<legend><%= l 'query' %></legend>
-            	<div class="control-group">
-                    <label class="control-label-left"><%= l 'book' %></label>
-                    <div class="controls">
-                        <input name="book" maxlength="30" size="30" id="book" class="required" type="text">
-            	       </div>
-            	</div> 	
-            	<div class="control-group">
-            	    <div class="controls">
-                    	<div class="float_right">
-                            <button type="submit" class="btn btn-primary"><%= l 'search' %> ▶</button>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-                     
-			</form>
-		</div><!-- END VALIDATION GROUP -->
+<div class="container">                                 
+<div class="row">
+<div class="span12"> 
+
+<h2>Books</h2>
+    
+% for my $book (sort keys %$books) {
+<p><%= $book %><br />
+    % for my $page (sort { $a <=> $b } keys %{$books->{$book}}) {
+        <a href="/page/<%= $books->{$book}->{$page} %>"> <%= $page %> </a>
+        % if (($page % 10) == 0) {
+        <br />
+        % }
+    % }
+</p>
+% }
+
+
+</div>
+</div>
+</div>

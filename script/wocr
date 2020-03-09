@@ -12,7 +12,7 @@ use Cwd;
 BEGIN{
   $ENV{MOJO_MODE} ||= 'development';
   #  $ENV{MOJO_MODE} = 'production';
-  $ENV{MOJO_HOME} ||= '/Users/helmut/github/ocr/Wocr';
+  $ENV{MOJO_HOME} ||= '/Users/helmut/github/ocr-hw/ocr-gt-tools-mojo';
 }
 
 # Source directory has precedence
