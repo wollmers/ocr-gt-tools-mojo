@@ -11,6 +11,7 @@
 % my $image_after   = $hash->{'_image_after'};
 % my $line_before   = $hash->{'_line_before'};
 % my $line_after    = $hash->{'_line_after'};
+% my $next_line    = $hash->{'_next_line'};
 		
 <div class="container">                                 
 <div class="row">
@@ -24,8 +25,7 @@
 
 % if ($image_before) {
 <p>Before: <%= $image_before %><br />
-  <a href='/line/<%= $line_before %>'><img src="<%= $image_before %>" 
-    style="max-height: 100px;min-height: 40px;" /><span style="font-size: 24px;"> ▶</span></a>
+<img src="<%= $image_before %>" style="max-height: 100px;min-height: 40px;" />
 </p>
 % }
 
@@ -35,9 +35,9 @@
 
         <div>
            Line: <%= $line %>      
-	       <form class="form-horizontal" action="/change/<%= $line %>" method="post">
+	       <form class="form-horizontal" action="/docorr/<%= $line %>" method="post">
             	<div class="control-group">
-            	        <input name="line_after" id="line_after" type="hidden" value="<%= $line_after %>" >
+            	        <input name="next_line" id="next_line" type="hidden" value="<%= $next_line %>" >
             	        <input name="image" id="image" type="hidden" value="<%= $image %>" >
             	        % my $length = length($text) + 10;
             	        % if ($length < 80) {$length = 80; }
@@ -61,8 +61,7 @@
 
 % if ($image_after) {
 <p>Next: <%= $image_after %><br />
-  <a href='/line/<%= $line_after %>'><img src="<%= $image_after %>" 
-    style="max-height: 100px;min-height: 40px;" /><span style="font-size: 24px;"> ▶</span></a>
+<img src="<%= $image_after %>" style="max-height: 100px;min-height: 40px;" />
 </p>
 % }
 

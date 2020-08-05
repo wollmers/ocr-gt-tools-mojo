@@ -7,10 +7,11 @@
 
 <link rel="stylesheet" type="text/css" href="/skins/<%= $skin %>/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/skins/<%= $skin %>/css/bootstrap-theme.min.css">
-<link rel="stylesheet" type="text/css" href="/skins/<%= $skin %>/css/wocr.css">
+
 <link rel="stylesheet" type="text/css" href="/skins/<%= $skin %>/css/font-awesome.css">
 <link rel="stylesheet" type="text/css" href="/skins/<%= $skin %>/css/octicons.css">
 <link rel="stylesheet" type="text/css" href="/skins/<%= $skin %>/css/editor.css">
+<link rel="stylesheet" type="text/css" href="/skins/<%= $skin %>/css/wocr.css">
 
 <title><%= title %></title>
 

@@ -61,6 +61,7 @@ has config_file => sub {
 sub startup {
   my $app = shift;
 
+  $app->plugin('DefaultHelpers');
 
   $app->plugin(
     Config => {
@@ -110,10 +111,9 @@ sub startup {
   my $routes = $app->routes;
 
   $routes->get('/')->to('book#index');
-  #$routes->get('/front/*name')->to('front#page');
 
   $routes->get('/book/*book')->to('book#show');
-  $routes->post('/book')->to('book#query');
+  #$routes->post('/book')->to('book#query');
   #$routes->get('/books' => sub { shift->render });
   $routes->get('/books')->to('book#index');
 
@@ -121,7 +121,12 @@ sub startup {
   #$routes->post('/page')->to('page#query');
   #$routes->get('/pages' => sub { shift->render });
 
-  $routes->get('/line/*line')->to('line#index');
+  $routes->any('/line/*line')->to('line#index');
+  $routes->post('/change/*line')->to('line#change');
+
+  $routes->any('/corr/*line')->to('corr#index');
+  $routes->post('/docorr/*line')->to('corr#change');
+  $routes->any('/corr')->to('corr#index');
 
   $routes->get('/about' => sub { shift->render });
 

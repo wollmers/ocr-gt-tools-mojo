@@ -12,7 +12,7 @@ sub index {
   $self->stash('_books' => $books);
 
   #/Users/helmut/github/ocr-gt/AustrianNewspapers/ gt/eval/  ONB_aze_18950706_4/ONB_aze_18950706_4.jpg_tl_1.gt.txt
-  for my $dir (qw(line_train line_eval)) {
+  for my $dir (qw(train eval)) {
     my $dir_name= $ocr_basedir . $self->stash->{'config'}->{'ocr'}->{'lines'}->{$dir};
     opendir(my $dir_dh, "$dir_name") || die "Can't opendir $dir_name: $!";
     my @subdirs = grep { /^[^._]/ && -d "$dir_name/$_" } readdir($dir_dh);

@@ -1,6 +1,8 @@
-package Wocr::Line;
+package Wocr::Corr;
 use Mojo::Base 'Mojolicious::Controller';
 
+# https://perlmaven.com/how-to-remove-copy-or-rename-a-file-with-perl
+# unlink $file or warn "Could not unlink $file: $!";
 use File::Copy qw(move);
 
 use XML::Twig;
@@ -12,6 +14,27 @@ sub index {
   my $self = shift;
 
   my $line = $self->param('line');
+
+  my $next_corr_line = '';
+
+  #'corr_dir'   => '/Users/helmut/github/ocr-hw/ocr-gt-AustrianNewspapers-scripts/corr/',
+  my $corr_dir = $self->stash->{'config'}->{'ocr'}->{'corr_dir'};
+
+  opendir(my $dir_dh, "$corr_dir") || die "Can't opendir $corr_dir: $!";
+  my @files = sort grep { /^[^._]/ && /\.gt\.txt$/i && -f "$corr_dir/$_" } readdir($dir_dh);
+  closedir $dir_dh;
+
+  unless ($line) {
+    if (@files >= 1) {
+      $line = $files[0];
+    }
+  }
+  FILE: for my $file (@files) {
+    if ($file && $file ne $line) {
+      $next_corr_line = $file;
+      last FILE;
+    }
+  }
   #/Users/helmut/github/ocr-gt/AustrianNewspapers/
   my $ocr_basedir = $self->stash->{'config'}->{'ocr'}->{'basedir'};
 
@@ -27,13 +50,14 @@ sub index {
   my $text  = '###not found###';
   my $image = '###not found###';
 
-  $self->stash('_book'    => $book);
-  $self->stash('_text'    => $text);
-  $self->stash('_image'   => $image);
-  $self->stash('_pagedir' => $pagedir);
-  $self->stash('_page'    => $page);
-  $self->stash('_line'    => $line);
-  $self->stash('_ocr_basedir'    => $ocr_basedir);
+  $self->stash('_next_line'   => $next_corr_line);
+  $self->stash('_book'        => $book);
+  $self->stash('_text'        => $text);
+  $self->stash('_image'       => $image);
+  $self->stash('_pagedir'     => $pagedir);
+  $self->stash('_page'        => $page);
+  $self->stash('_line'        => $line);
+  $self->stash('_ocr_basedir' => $ocr_basedir);
 
   my $page_image = '';
   for my $dir (keys %{$self->stash->{'config'}->{'ocr'}->{'pages'}}) {
@@ -108,7 +132,7 @@ sub index {
 
 
     $self->render_not_found
-        unless $self->render(template => "line");
+        unless $self->render(template => "corr_line");
 }
 
 # ONB_aze_18950706_1.jpg_line_1545026835683_1.png
@@ -119,11 +143,13 @@ sub change {
 
     my $line       = $self->param('line');
     my $text       = $self->param('line-text');
-    my $line_after = $self->param('line_after');
+    my $line_after = $self->param('next_line');
     my $image      = $self->param('image');
 
     #/Users/helmut/github/ocr-gt/AustrianNewspapers/
     my $ocr_basedir = $self->stash->{'config'}->{'ocr'}->{'basedir'};
+
+    my $corr_dir = $self->stash->{'config'}->{'ocr'}->{'corr_dir'};
 
     $self->app->log->debug("line-text: [$text]");
 
@@ -156,15 +182,19 @@ sub change {
         close($out);
     }
 
+    my $corr_file = $corr_dir . $line;
+    #unlink $corr_file or warn "Could not unlink $corr_file: $!";
+    unlink $corr_file or $self->app->log->debug("Could not unlink $corr_file: $!");
+
     $self->app->log->debug("redirect_to: [$line_after]");
 
     if ($line_after) {
         $self->res->code(307); # Temporary Redirect
-        $self->redirect_to('/line/'.$line_after);
+        $self->redirect_to('/corr/'.$line_after);
     }
     else {
         $self->res->code(307); # Temporary Redirect
-        $self->redirect_to('/line/'.$line);
+        $self->redirect_to('/corr/'.$line);
     }
 }
 

@@ -1,0 +1,150 @@
+<%# Comment, useful for debugging %>
+<table class="charspicker" >
+<tbody>
+<tr>
+<td>à</td>
+<td>á</td>
+<td>â</td>
+<td>æ</td>
+<td>aͤ</td>
+<td>Æ</td>
+<td>Aͤ</td>
+<td>Á</td>
+<td>ç</td>
+<td>Ç</td>
+<td>ɔ</td><%# 'ɔ' U+0254 LATIN SMALL LETTER OPEN O (Lowercase_Letter) %>
+<td>è</td>
+<td>é</td>
+<td>ê</td>
+<td>ë</td>
+<td>ï</td>
+<td>ʞ</td><%# 'ʞ' U+029E LATIN SMALL LETTER TURNED K (Lowercase_Letter) %>
+<td>ñ</td>
+</tr>
+
+<tr>
+<td>ò</td>
+<td>ó</td>
+<td>ô</td>
+
+<td>ő</td><%# 'ő' U+0151 LATIN SMALL LETTER O WITH DOUBLE ACUTE (Lowercase_Letter) %>
+
+<td>ō</td><%# 'ō' U+014D LATIN SMALL LETTER O WITH MACRON (Lowercase_Letter) %>
+<td>œ</td>
+<td>oͤ</td>
+<td>Ó</td>
+<td>Ō</td>
+<td>Oͤ</td>
+<td>Œ</td>
+<td>ř</td>
+<td>ꝛ</td><%# 'ꝛ' U+A75B LATIN SMALL LETTER R ROTUNDA (Lowercase_Letter) %>
+<td>Š</td>
+<td>ſ</td><%# 'ſ' U+017F LATIN SMALL LETTER LONG S (Lowercase_Letter) %>
+<td>û</td>
+<td>uͤ</td>
+<td>Uͤ</td>
+<td>Ù</td>
+<td>Û</td>
+<td>ž</td>
+<td>Ž</td>
+</tr>
+
+<tr>
+<td>⸗</td><%# '⸗' U+2E17 DOUBLE OBLIQUE HYPHEN (Dash_Punctuation) %>
+<td>—</td><%# '—' U+2014 EM DASH (Dash_Punctuation) %>
+<td>…</td><%# '…' U+2026 HORIZONTAL ELLIPSIS (Other_Punctuation) %>
+<td>„</td><%# '„' U+201E DOUBLE LOW-9 QUOTATION MARK (Open_Punctuation) %>
+<td>“</td><%# '“' U+201C LEFT DOUBLE QUOTATION MARK (Initial_Punctuation) %>
+<td>”</td><%# '”' U+201D RIGHT DOUBLE QUOTATION MARK (Final_Punctuation) %>
+<td>«</td><%# '«' U+00AB LEFT-POINTING DOUBLE ANGLE QUOTATION MARK (Initial_Punctuation) %>
+<td>»</td><%# '»' U+00BB RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK (Final_Punctuation) %>
+<td>’</td><%# '’' U+2019 RIGHT SINGLE QUOTATION MARK (Final_Punctuation) %>
+<td>‘</td><%# '‘' U+2018 LEFT SINGLE QUOTATION MARK (Initial_Punctuation) %>
+<td>‚</td><%# '‚' U+201A SINGLE LOW-9 QUOTATION MARK (Open_Punctuation) %>
+<td>´</td><%# '´' U+00B4 ACUTE ACCENT (Modifier_Symbol) %>
+<td>·</td><%# '·' U+00B7 MIDDLE DOT (Other_Punctuation) %>
+<td>•</td><%# '•' U+2022 BULLET (Other_Punctuation) %>
+<td>˙</td><%# '˙' U+02D9 DOT ABOVE (Modifier_Symbol) %>
+<td>†</td><%# '†' U+2020 DAGGER (Other_Punctuation) %>
+<td>‡</td><%# '‡' U+2021 DOUBLE DAGGER (Other_Punctuation) %>
+</tr>
+
+<tr>
+<td>☛</td><%# '☛' U+261B BLACK RIGHT POINTING INDEX (Other_Symbol) %>
+<td>☚</td><%# '☚' U+261A BLACK LEFT POINTING INDEX (Other_Symbol) %>
+<td>✤</td><%# '✤' U+2724 HEAVY FOUR BALLOON-SPOKED ASTERISK (Other_Symbol) %>
+<td>▲</td><%# '▲' U+25B2 BLACK UP-POINTING TRIANGLE (Other_Symbol) %>
+<td>△</td><%# '△' WHITE UP-POINTING TRIANGLE (Other_Symbol) %>
+<td>◯</td><%# '◯' U+25EF LARGE CIRCLE (Other_Symbol) %>
+<td>●</td><%# '●' U+25CF BLACK CIRCLE (Other_Symbol) %>
+<td>⬤</td><%# '⬤' U+2B24 BLACK LARGE CIRCLE (Other_Symbol) %>
+<td>□</td><%# '□' U+25A1 WHITE SQUARE (Other_Symbol) %>
+<td>■</td><%# '■' U+25A0 BLACK SQUARE (Other_Symbol) %>
+<td>◻</td><%# '◻' U+25FB WHITE MEDIUM SQUARE (Math_Symbol) %>
+<td>◼</td><%# '◼' U+25FC BLACK MEDIUM SQUARE (Math_Symbol) %>
+</tr>
+
+<tr>
+<td>±</td><%# '±' U+00B1 PLUS-MINUS SIGN (Math_Symbol) %>
+<td>÷</td><%# '÷'  U+00F7 DIVISION SIGN (Math_Symbol) %>
+<td>∕</td><%# '∕'  U+2215 DIVISION SLASH (Math_Symbol) %>
+<td>✕</td><%# '✕'  U+2715 MULTIPLICATION X (Other_Symbol) %>
+<td>－</td><%# '－' U+FF0D FULLWIDTH HYPHEN-MINUS (Dash_Punctuation) %>
+<td>＋</td><%# '＋' U+FF0B FULLWIDTH PLUS SIGN (Math_Symbol) %>
+<td>＜</td><%# '＜' U+FF1C FULLWIDTH LESS-THAN SIGN (Math_Symbol) %>
+<td>＝</td><%# '＝' U+FF1D FULLWIDTH EQUALS SIGN (Math_Symbol) %>
+<td>＞</td><%# '＞' U+FF1E FULLWIDTH GREATER-THAN SIGN (Math_Symbol) %>
+<td>｜</td><%# '｜' U+FF5C FULLWIDTH VERTICAL LINE (Math_Symbol) %>
+<td>～</td><%# '～' U+FF5E FULLWIDTH TILDE (Math_Symbol) %>
+<td>￢</td><%# '￢' U+FFE2 FULLWIDTH NOT SIGN (Math_Symbol) %>
+<td>≅</td><%# '≅'  U+2245 APPROXIMATELY EQUAL TO (Math_Symbol) %>
+</tr>
+
+<tr>
+<td>¼</td>
+<td>½</td>
+<td>¾</td>
+<td>⅐</td>
+<td>⅑</td>
+<td>⅒</td>
+<td>⅓</td>
+<td>⅔</td>
+<td>⅕</td>
+<td>⅖</td>
+<td>⅗</td>
+<td>⅘</td>
+<td>⅙</td>
+<td>⅚</td>
+<td>⅛</td>
+<td>⅜</td>
+<td>⅝</td>
+<td>⅞</td>
+<td>↉</td>
+</tr>
+
+<tr>
+<td>₀</td>
+<td>₁</td>
+<td>₂</td>
+<td>₃</td>
+<td>₄</td>
+<td>₅</td>
+<td>₆</td>
+<td>₇</td>
+<td>₈</td>
+<td>₉</td>
+
+<td>²</td>
+<td>³</td>
+<td>¹</td>
+<td>⁰</td>
+<td>⁴</td>
+<td>⁵</td>
+<td>⁶</td>
+<td>⁷</td>
+<td>⁸</td>
+<td>⁹</td>
+</tr>
+</tbody>
+</table>
+

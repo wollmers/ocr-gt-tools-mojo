@@ -2,6 +2,12 @@ package Wocr::Page;
 use Mojo::Base 'Mojolicious::Controller';
 
 #use Mojo::Dom;
+use XML::Twig;
+
+use Data::Dumper;
+
+my $xml  = {};
+my $Page_imageFilename = '';
 
 sub index {
   my $self = shift;
@@ -19,39 +25,125 @@ sub index {
   $self->stash('_page'    => $page);
   $self->stash('_lines'   => $lines);
 
+  my $page_image = '';
+  for my $dir (keys %{$self->stash->{'config'}->{'ocr'}->{'pages'}}) {
+    my $dir_name = $ocr_basedir . $self->stash->{'config'}->{'ocr'}->{'pages'}->{$dir};
+
+    if (-f "$dir_name/$page.xml") {
+      parse_xml("$dir_name/$page.xml",$lines);
+      $page_image = $Page_imageFilename;
+    }
+    #if (-f "$dir_name/$page.jpg") {
+    #  $page_image = "$page.jpg";
+    #}
+    #elsif (-f "$dir_name/$page.tif") {
+    #  $page_image = "$page.jpg";
+    #}
+    #elsif (-f "$dir_name/$page.png") {
+    #  $page_image = "$page.png";
+    #}
+  }
+
+  #$self->app->log->debug(Dumper($xml));
+  $self->app->log->debug("page_image: [$page_image]");
+
+  my $line_count = 0;
   #/Users/helmut/github/ocr-gt/AustrianNewspapers/ gt/eval/  ONB_aze_18950706_4/ONB_aze_18950706_4.jpg_tl_1.gt.txt
-  for my $dir (keys %{$self->stash->{'config'}->{'ocr'}->{'lines'}}) {
-    my $dir_name = $ocr_basedir . $self->stash->{'config'}->{'ocr'}->{'lines'}->{$dir};
-    opendir(my $dir_dh, "$dir_name") || die "Can't opendir $dir_name: $!";
-    my @subdirs = grep { /^[^._]/ && -d "$dir_name/$_" } readdir($dir_dh);
-    closedir $dir_dh;
-
-    # ONB_aze_18950706_4
-    for my $subdir (@subdirs) {
-        next unless ($subdir eq $page);
-        $pagedir = $subdir;
-        $book = $subdir;
-        $book =~ s/_\d+$//; # remove page number
-
-        my $subdir_name = $dir_name . '/' . $subdir;
-        opendir(my $subdir_dh, "$subdir_name") || die "Can't opendir $subdir_name: $!";
-        my @lines = grep { /^[^._]/ && /\.txt$/i && -f "$subdir_name/$_" } readdir($subdir_dh);
-        closedir $subdir_dh;
-
-        # ONB_aze_18950706_4.jpg_tl_1.gt.txt
-        for my $line (@lines) {
-            my $line_no = 0;
-            if ($line =~m/_(\d+)\.gt\.txt$/) {
-                $line_no = $1;
-            }
-            $lines->{$line_no} = $line;
-        }
+  # $xml->{$RegionRefIndexed_index}->{$readingOrder} = $TextLine_id;
+  for my $RegionRefIndexed_index (sort { $a <=> $b } keys %{$xml}) {
+    $self->app->log->debug("RegionRefIndexed_index: [$RegionRefIndexed_index]");
+    for my $readingOrder (sort { $a <=> $b } keys %{$xml->{$RegionRefIndexed_index}}) {
+      $self->app->log->debug("readingOrder: [$readingOrder]");
+      $line_count++;
+      my $TextLine_id = $xml->{$RegionRefIndexed_index}->{$readingOrder};
+      $self->app->log->debug("TextLine_id: [$TextLine_id]");
+      # ONB_aze_18950706_4.jpg_line_1545181572766_4.gt.txt
+      my $text_line_file = $page_image . '_' . $TextLine_id . '.gt.txt';
+      $lines->{$line_count} = $text_line_file;
     }
   }
 
   $self->render_not_found
     unless $self->render(template => "page");
 }
+
+sub parse_xml {
+  my ($xmlfile, $lines) = @_;
+  $xml = {};
+  my $twig = XML::Twig->new(
+    #remove_cdata => 1,
+    TwigHandlers => {
+  	  '/PcGts/Page' => \&parse_page,
+    },
+  );
+  eval { $twig->parsefile($xmlfile); };
+
+  if ($@) {
+    #print STDERR "XML PARSE ERROR: " . $@;
+    die "XML PARSE ERROR: " . $@;
+  }
+  return ($xml);
+
+}
+
+#<ReadingOrder>
+#      <OrderedGroup id="ro_1567004082174" caption="Regions reading order">
+#        <RegionRefIndexed index="0" regionRef="r_1_1"/>
+
+sub parse_page {
+  my ($twig, $Page) = @_;
+
+  # /PcGts
+  # <Page imageFilename="ONB_ibn_18640702_006.tif"
+
+  $Page_imageFilename = $Page->att('imageFilename');
+
+  # <ReadingOrder>
+  #    <OrderedGroup id="ro_1567004082174" caption="Regions reading order">
+  #      <RegionRefIndexed index="0" regionRef="r_1_1"/>
+
+  my $regions = {};
+
+  my $ReadingOrder = $Page->first_child( 'ReadingOrder');
+  my $OrderedGroup = $ReadingOrder->first_child( 'OrderedGroup');
+
+  my @RegionRefIndexed = $OrderedGroup->children( 'RegionRefIndexed');
+  for my $RegionRefIndexed (@RegionRefIndexed) {
+    my $RegionRefIndexed_index = $RegionRefIndexed->att('index');
+    my $regionRef = $RegionRefIndexed->att('regionRef');
+    $xml->{$RegionRefIndexed_index} = {};
+    #$xml->{'regions'}->{$regionRef} = $RegionRefIndexed_index;
+    $regions->{$regionRef} = $RegionRefIndexed_index;
+  }
+
+  # <TextRegion type="paragraph" id="r_1_1" custom="readingOrder {index:0;}">
+  #      <Coords points="737,35 836,35 836,79 737,79"/>
+  #      <TextLine id="tl_1" primaryLanguage="German" custom="readingOrder {index:0;}">
+
+  my @TextRegions = $Page->children('TextRegion');
+  for my $TextRegion (@TextRegions) {
+    my $RegionRef = $TextRegion->att('id');
+    my $RegionRefIndexed_index = $regions->{$RegionRef};
+
+    #my $textlines = {}; # collect textlines from line_files
+
+    my @TextLines = $TextRegion->children( 'TextLine');
+
+    for my $TextLine (@TextLines) {
+
+	  my $TextLine_id  = $TextLine->att( 'id');
+  	  my $custom       = $TextLine->att( 'custom');
+
+	  my $readingOrder;
+	  if ($custom =~ m/readingOrder\s*\{\s*index\s*:\s*(\d+)\s*;\s*\}/) {
+   		$readingOrder = $1;
+   		$xml->{$RegionRefIndexed_index}->{$readingOrder} = $TextLine_id;
+   	  }
+    }
+  }
+  return 1;
+}
+
 
 
 sub query {
@@ -61,34 +153,6 @@ sub query {
   $self->redirect_to("/book/$page");
 }
 
-=pod
 
-sub show {
-  my $self = shift;
-
-  # /skins/<%= $skin %>/css/bootstrap.min.css
-  my $file1 = '/Users/helmut/github/perl/Wocr/share/files/public/pages/isis_152.hocr.html';
-  my $scan = '/pages/isis_152.jpg';
-
-  open(my $in1,"<:encoding(UTF-8)",$file1) or die "cannot open $file1: $!";
-
-  my $html = '';
-  while (my $line = <$in1>) { $html .= $line;}
-
-  my $dom = Mojo::DOM->new($html);
-
-  my $content = $dom->at('div.ocr_page');
-
-  #$self->stash(hocr => $content);
-  #$self->stash(hocr => 'test');
-  $self->stash->{hocr} = $content;
-  $self->stash->{scan} = $scan;
-
-  # Render $page
-  #$self->render_not_found  unless
-    $self->render();
-}
-
-=cut
 
 1;

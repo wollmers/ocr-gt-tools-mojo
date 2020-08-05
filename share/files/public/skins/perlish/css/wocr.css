@@ -148,3 +148,16 @@ a {
 .progress-bottom {
     margin-bottom: 1px; height: 10px; border-top-right-radius: 0; border-top-left-radius: 0;
 }
+
+table.charspicker {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+}
+
+.charspicker tr,
+.charspicker td {
+    border: 2px solid black;
+    font-size: 24px;
+}
