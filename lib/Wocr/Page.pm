@@ -15,7 +15,9 @@ sub index {
     my $page = $self->param('page');
 
     #/Users/helmut/github/ocr-gt/AustrianNewspapers/
-    my $ocr_basedir = $self->stash->{'config'}->{'ocr'}->{'basedir'};
+    #my $ocr_basedir = $self->stash->{'config'}->{'ocr'}->{'basedir'};
+    my $ocr_basedir = $self->app->ocr_basedir;
+    my $ocr_conf = $self->app->ocr;
 
     my $lines   = {};
     my $pagedir = '';
@@ -27,9 +29,11 @@ sub index {
     $self->stash('_lines'   => $lines);
 
     my $page_image = '';
-    for my $dir (keys %{$self->stash->{'config'}->{'ocr'}->{'pages'}}) {
+    #for my $dir (keys %{$self->stash->{'config'}->{'ocr'}->{'pages'}}) {
+    for my $dir (qw(train eval)) {
         my $dir_name
-            = $ocr_basedir . $self->stash->{'config'}->{'ocr'}->{'pages'}->{$dir};
+            #= $ocr_basedir . $self->stash->{'config'}->{'ocr'}->{'pages'}->{$dir};
+            = $ocr_basedir . $ocr_conf->{'pages'}->{$dir};
 
         if (-f "$dir_name/$page.xml") {
             parse_xml("$dir_name/$page.xml", $lines);

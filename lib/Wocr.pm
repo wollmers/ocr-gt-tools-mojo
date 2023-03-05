@@ -36,12 +36,12 @@ has db => sub {
 
 has ocr => sub {
     my $self = shift;
-    return $self->config->{ocr};
+    return $self->config->{'ocr'};
 };
 
 has ocr_basedir => sub {
     my $self = shift;
-    return $self->ocr->{basedir};
+    return $self->ocr->{'basedir'};
 };
 
 has app_debug => 0;

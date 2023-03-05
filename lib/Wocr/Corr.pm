@@ -18,7 +18,10 @@ sub index {
     my $next_corr_line = '';
 
     #'corr_dir' => '/Users/helmut/github/ocr-hw/ocr-gt-AustrianNewspapers-scripts/corr/',
-    my $corr_dir = $self->stash->{'config'}->{'ocr'}->{'corr_dir'};
+
+    my $ocr_conf = $self->app->ocr;
+    #my $corr_dir = $self->stash->{'config'}->{'ocr'}->{'corr_dir'};
+    my $corr_dir = $ocr_conf->{'corr_dir'};
 
     opendir(my $dir_dh, "$corr_dir") || die "Can't opendir $corr_dir: $!";
     my @files
@@ -38,7 +41,8 @@ FILE: for my $file (@files) {
     }
 
     #/Users/helmut/github/ocr-gt/AustrianNewspapers/
-    my $ocr_basedir = $self->stash->{'config'}->{'ocr'}->{'basedir'};
+    #my $ocr_basedir = $self->stash->{'config'}->{'ocr'}->{'basedir'};
+    my $ocr_basedir = $self->app->ocr_basedir;
 
     my $page = $line;
     $page =~ s/\.(jpg|tif).*$//i;
@@ -62,13 +66,17 @@ FILE: for my $file (@files) {
     $self->stash('_ocr_basedir' => $ocr_basedir);
 
     my $page_image = '';
-    for my $dir (keys %{$self->stash->{'config'}->{'ocr'}->{'pages'}}) {
+    #for my $dir (keys %{$self->stash->{'config'}->{'ocr'}->{'pages'}}) {
+    for my $dir (qw(train eval)) {
         my $dir_name
-            = $ocr_basedir . $self->stash->{'config'}->{'ocr'}->{'pages'}->{$dir};
+            #= $ocr_basedir . $self->stash->{'config'}->{'ocr'}->{'pages'}->{$dir};
+            = $ocr_basedir . $ocr_conf->{'pages'}->{$dir};
+
 
         if (-f "$dir_name/$page.xml") {
             parse_xml("$dir_name/$page.xml", $lines);
-            $pagedir    = $self->stash->{'config'}->{'ocr'}->{'lines'}->{$dir} . "/$page";
+            #$pagedir    = $self->stash->{'config'}->{'ocr'}->{'lines'}->{$dir} . "/$page";
+            $pagedir    = $ocr_conf->{'lines'}->{$dir} . "/$page";
             $page_image = $Page_imageFilename;
         }
     } ## end for my $dir (keys %{$self...})
