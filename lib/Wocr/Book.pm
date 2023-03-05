@@ -5,7 +5,6 @@ sub index {
     my $self = shift;
 
     #/Users/helmut/github/ocr-gt/AustrianNewspapers/
-    #my $ocr_basedir = $self->stash->{'config'}->{'ocr'}->{'basedir'};
     my $ocr_basedir = $self->app->ocr_basedir;
     my $ocr_conf = $self->app->ocr;
 
@@ -15,10 +14,7 @@ sub index {
 
 #/Users/helmut/github/ocr-gt/AustrianNewspapers/ gt/eval/  ONB_aze_18950706_4/ONB_aze_18950706_4.jpg_tl_1.gt.txt
     for my $dir (qw(train eval)) {
-        #my $ocr_conf = $self->app->ocr;
-        my $dir_name
-            #= $ocr_basedir . $self->stash->{'config'}->{'ocr'}->{'lines'}->{$dir};
-            = $ocr_basedir . $ocr_conf->{'lines'}->{$dir};
+        my $dir_name = $ocr_basedir . $ocr_conf->{'lines'}->{$dir};
         opendir(my $dir_dh, "$dir_name") || die "Can't opendir $dir_name: $!";
         my @subdirs = grep { /^[^._]/ && -d "$dir_name/$_" } readdir($dir_dh);
         closedir $dir_dh;
@@ -37,7 +33,6 @@ sub index {
         } ## end for my $subdir (@subdirs)
     } ## end for my $dir (qw(train eval))
 
-    #$self->render_not_found unless $self->render(template => "books");
     $self->reply->not_found unless $self->render(template => "books");
 } ## end sub index
 

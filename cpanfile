@@ -16,14 +16,14 @@ requires 'Term::Prompt', '0';
 requires 'File::Basename', '0';
 requires 'File::ShareDir', '0';
 requires 'File::Copy::Recursive', '0';
+requires 'File::Copy', '0';
 #requires 'File::Next', '0';
 requires 'File::Spec::Functions', '0';
 requires 'Getopt::Long', '0';
 requires 'Encode', '0';
 
+requires 'XML::Twig', '0';
 requires 'String::Similarity', '0';
-
-# requires 'Some::Module', 'VERSION';
 
 on test => sub {
     requires 'Test::More', '0.88';
