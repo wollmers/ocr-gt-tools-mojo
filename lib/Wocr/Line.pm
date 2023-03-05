@@ -132,7 +132,7 @@ sub change {
     # image: ONB_aze_18950706_1.jpg_tl_52.gt.txt
 
     my $oldfile = $ocr_basedir . $image;
-    $oldfile =~ s/\.png$/.gt.txt/;
+    $oldfile    =~ s/\.png$/.gt.txt/;
 
     open(my $in, "<:encoding(UTF-8)", $oldfile)
         or $self->app->log->debug("cannot open $oldfile: $!");

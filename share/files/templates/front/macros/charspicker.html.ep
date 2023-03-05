@@ -70,6 +70,7 @@
 </tr>
 
 <tr>
+<td>ʃ</td><%# 'ʃ' U+0283 LATIN SMALL LETTER ESH (Lowercase_Letter) %>
 <td>☛</td><%# '☛' U+261B BLACK RIGHT POINTING INDEX (Other_Symbol) %>
 <td>☚</td><%# '☚' U+261A BLACK LEFT POINTING INDEX (Other_Symbol) %>
 <td>✤</td><%# '✤' U+2724 HEAVY FOUR BALLOON-SPOKED ASTERISK (Other_Symbol) %>
